@@ -14,10 +14,11 @@ Learn computational drug discovery by **building and deeply understanding every 
 ## Current State  *(update this section as it changes)*
 
 - **Baseline model:** `scripts/bbbp_starter.py` — RDKit Morgan fingerprints (ECFP4, radius 2, 2048 bits) + RandomForest on the MoleculeNet BBBP dataset. 0.93 test AUROC on a **random** split (kept as historical baseline only — inflated, see below).
-- **Current best (honest) model:** `scripts/bbbp_v2.py` — same features, but a **Bemis-Murcko scaffold split** plus a RandomForest vs. XGBoost comparison. RandomForest 0.848 AUROC, XGBoost 0.813 AUROC. This is the number to trust and to try to beat. Reasoning logged in `drug-discovery-wiki/decisions/2026-08-28-scaffold-split-over-random-split.md`.
-- Both pushed to GitHub (danimonz/bbb-penetration-model).
+- **Current best (honest) model:** `scripts/bbbp_v3.py` — same features and scaffold split as v2, plus hyperparameter tuning (`RandomizedSearchCV`, 25 candidates, 5-fold scaffold-grouped CV). RandomForest 0.861 AUROC (up from 0.848), XGBoost 0.835 AUROC (up from 0.813). RandomForest still wins. Reasoning logged in `drug-discovery-wiki/decisions/2026-08-28-scaffold-split-over-random-split.md` and `drug-discovery-wiki/decisions/2026-09-01-grouped-cv-for-tuning.md`.
+- `scripts/bbbp_v2.py` (untuned RandomForest vs. XGBoost on scaffold split) kept as the pre-tuning baseline.
+- v2 pushed to GitHub (danimonz/bbb-penetration-model); v3 not yet pushed.
 - **Environment:** Ubuntu. Main work in a `.venv` (Python 3.12), pinned in `requirements.txt`. A **separate Python 3.11 env** is needed for PyTDC (3.12 breaks its install).
-- **The ladder (improvement path):** RandomForest baseline → XGBoost + **scaffold split** (done, currently here) → tune → fine-tune a chemical transformer (ChemBERTa / MolFormer) or a graph neural net → official **TDC leaderboard** entry.
+- **The ladder (improvement path):** RandomForest baseline → XGBoost + **scaffold split** (done) → tune (done, currently here) → fine-tune a chemical transformer (ChemBERTa / MolFormer) or a graph neural net → official **TDC leaderboard** entry.
 
 ## How Claude Code Should Work Here
 
